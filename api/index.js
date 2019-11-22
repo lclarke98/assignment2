@@ -5,21 +5,30 @@ module.exports = api;
 
 const db = require(`./db-datastore`);
 
-api.post('/:id(\\w+)', async (req, res) => {
+api.get('/', async (req, res) => {
   try {
-    res.send(await db.post(req.params.id));
+    res.json(await db.list());
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
   }
 });
 
-api.put('/:id(\\w+)', bodyParser.text(), async (req, res) => {
+api.post('/:id(\\w+)', bodyParser.text(), async (req, res) => {
   try {
-    await db.put(req.params.id, req.body);
-    res.sendStatus(204);
+    res.send(await db.post(req.params.id, req.body));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
   }
 });
+
+api.put('/', async (req, res) => {
+  try {
+    await db.put(req.params.id, 0);
+  } catch (e) {
+    console.error(e);
+    res.sendStatus(500);
+  }
+});
+

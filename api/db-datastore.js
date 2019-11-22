@@ -7,6 +7,14 @@ function key(id) {
   return ds.key([kind, id]);
 }
 
+module.exports.list = async () => {
+  // asynchronously get a list of entities with names
+  let [data] = await ds.createQuery(kind).select('name').order('name').run();
+  // extract only the names
+  data = data.map((val) => val.name);
+  return data;
+};
+
 module.exports.post = async (id, val) => {
   const entity = {
     key: key(id),
