@@ -5,18 +5,9 @@ module.exports = api;
 
 const db = require(`./db-datastore`);
 
-api.get('/', async (req, res) => {
+api.post('/:id(\\w+)', async (req, res) => {
   try {
-    res.json(await db.list());
-  } catch (e) {
-    console.error(e);
-    res.sendStatus(500);
-  }
-});
-
-api.get('/:id(\\w+)', async (req, res) => {
-  try {
-    res.send(await db.get(req.params.id));
+    res.send(await db.post(req.params.id));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
