@@ -1,4 +1,4 @@
-let mysql      = require('mysql2');
+let mysql = require('mysql2');
 let connection = mysql.createConnection({
               host     : 'localhost',
               user     : 'root',
@@ -10,12 +10,14 @@ connection.connect();
 global.db = connection;
 
 //add new register (post)
-module.exports.addRegister = function(req, res){
-       let name = req.body.name;
-       let number = req.body.number;
-       let sql = "INSERT INTO `numberRegister`(`name`,`number`) VALUES ('" + name + "','" + number + "')";
+module.exports.post = function(req, res){
+       let name = "tt";
+       let test = req.params.name;
+       echo(test);
+       let number = 2;
+       let sql = "INSERT INTO `numberRegister`(`numberReg_name`,`numberReg_number`) VALUES ('" + name + "','" + number + "')";
        let query = db.query(sql, function(err, result) {
-           console.log(added);
+           console.log("added");
        });
  };
 
