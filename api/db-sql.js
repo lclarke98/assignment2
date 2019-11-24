@@ -9,34 +9,38 @@ let connection = mysql.createConnection({
 connection.connect(); 
 global.db = connection;
 
-//add new register (post)
-module.exports.post = function(req, res){
-       let name = "tt";
-       let test = req.params.name;
-       echo(test);
-       let number = 2;
-       let sql = "INSERT INTO `numberRegister`(`numberReg_name`,`numberReg_number`) VALUES ('" + name + "','" + number + "')";
-       let query = db.query(sql, function(err, result) {
-           console.log("added");
-       });
- };
+module.exports.get = async (id) => {
+  connection.query("SELECT reg_number FROM register WHERE reg_name = ? ",
+  [id],
+    (error, results) => {
+      console.log(error)
+    });
+};
 
- //get a register (get)
-module.exports.getRegister = function(req, res){
-  let name = req.body.name;
-  let number = req.body.number;
-  let sql = "select * FROM `numberRegister` WHERE (`name`,`number`) VALUES ('" + name + "','" + number + "')";
+//???
+ module.exports.post = async (id) => {
+  let val =0;
+  let sql = "INSERT INTO `register`(`reg_name`,`reg_number`) VALUES ('" + id + "','" + val + "')";
   let query = db.query(sql, function(err, result) {
-      console.log(added);
+      console.log("added");
   });
 };
 
- //put number in a register (put)
- module.exports.putNumber = function(req, res){
-  let name = req.body.name;
-  let number = req.body.number;
-  let sql = "select * FROM `numberRegister` WHERE (`name`,`number`) VALUES ('" + name + "','" + number + "')";
-  let query = db.query(sql, function(err, result) {
-      console.log(added);
+//done
+module.exports.delete = async (id) => {
+  let sql = "DELETE FROM register WHERE reg_name = ? ";
+  connection.query(sql,id, (error, results) => {
+    if (error){
+      console.log(err)
+    }
   });
+};
+
+//done
+module.exports.put = async (id, newval) => {
+  connection.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",
+  [newval, id],
+    (error, results) => {
+      console.log(error)
+    });
 };
