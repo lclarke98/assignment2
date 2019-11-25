@@ -4,15 +4,15 @@ const api = express.Router();
 module.exports = api;
 
 let mysql = require('mysql2');
-let connection = mysql.createConnection({
-              host     : 'localhost',
-              user     : 'root',
-              password : "root",
-              database : 'assignment2'
-            });
-
-connection.connect(); 
-global.db = connection;
+const config = require('./db');
+const connection = mysql.createConnection(config.mysql)
+const db = connection;
+// Connects to mysql database
+try {
+  connection.connect();
+} catch (e) {
+  console.log(e);
+}
 
 
 api.get('/:name(\\w+)', async (req, res) => {
