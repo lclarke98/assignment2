@@ -21,15 +21,12 @@ module.exports.post = async (id,val) => {
   let con = await connection;
   let [data] = await con.query("SELECT reg_number FROM register WHERE reg_name = ? ",[id]);
   if(data.length == 0){
-    console.log(typeof(val))
-    await con.query("INSERT INTO `register`(`reg_name`,`reg_number`) VALUES ('" + id + "','" + val + "')");
+    await con.query("INSERT INTO register (reg_name, reg_number) VALUES (?,?)", [id, val]);
     return val;
   }else{
-    console.log("2")
     let currentVal = data[0].reg_number;
     let newVal = parseInt(currentVal) + parseInt(val);
-    console.log(typeof(newVal))
-    await con.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",[newVal, id],);
+    await con.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",[newVal, id]);
     return newVal.toString();
   }
 };

@@ -35,7 +35,7 @@ api.delete('/:name(\\w+)', bodyParser.text(), async (req, res) => {
 
 api.put('/:name(\\w+)', bodyParser.text(), async (req, res) => {
   try {
-    res.send(await db.get(req.params.name));
+    res.send(await db.put(req.params.name, req.body));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
