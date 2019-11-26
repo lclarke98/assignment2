@@ -3,10 +3,12 @@ const bodyParser = require('body-parser');
 const api = express.Router();
 module.exports = api;
 
+//Database variables
 let mysql = require('mysql2');
 const config = require('./db');
 const connection = mysql.createConnection(config.mysql)
 const db = connection;
+
 // Connects to mysql database
 try {
   connection.connect();
@@ -14,7 +16,7 @@ try {
   console.log(e);
 }
 
-
+//get method
 api.get('/:name(\\w+)', async (req, res) => {
   let id = req.params.name;
   let val = req.body;

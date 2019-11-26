@@ -4,6 +4,7 @@ const app = express();
 app.use('/api', require('./api'));
 app.use(express.static('static', { extensions: ['html'] }));
 
+//App runs on port 80
 const port = process.env.PORT || 80;
 
 app.listen(port, (err) => {
