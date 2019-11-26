@@ -3,38 +3,12 @@ const bodyParser = require('body-parser');
 const api = express.Router();
 module.exports = api;
 
-//Database variables
-let mysql = require('mysql2');
-const config = require('./db');
-const connection = mysql.createConnection(config.mysql)
-const db = connection;
-
-// Connects to mysql database
-try {
-  connection.connect();
-} catch (e) {
-  console.log(e);
-}
+const db = require(`./db-sql`);
 
 //get method
 api.get('/:name(\\w+)', async (req, res) => {
-  let id = req.params.name;
-  let val = req.body;
   try {
-    connection.query("SELECT reg_number FROM register WHERE reg_name = ? ",
-    [id],
-    (error, results) => {
-      if (error)
-        return res.json({
-        error: error
-    });
-    if(results.length == 0){
-      res.json(0)
-    }
-    else{
-      res.json(parseInt(results[0].reg_number));
-    }
-  });
+    res.send(await db.get(req.params.name));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -42,51 +16,17 @@ api.get('/:name(\\w+)', async (req, res) => {
 });
 
 api.post('/:name(\\w+)', bodyParser.text(), async (req, res) => {
-  let id = req.params.name;
-  let val = req.body;
   try {
-    connection.query("SELECT reg_number FROM register WHERE reg_name = ? ",
-    [id],
-    (error, results) => {
-      if (error)
-        return res.json({
-        error: error
-    });
-    if(results.length == 0){
-      let sql = "INSERT INTO `register`(`reg_name`,`reg_number`) VALUES ('" + id + "','" + val + "')";
-      let query = db.query(sql, function(err, result) {
-      })
-      res.json(parseInt(val));
-    }
-    else{
-      let currentVal = results[0].reg_number;
-      let newVal = parseInt(val)+parseInt(currentVal);
-      console.log(newVal)
-      connection.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",
-      [newVal, id],
-      (error, results) => {
-        console.log(error)
-      })
-      res.json(newVal);
-    };
-  });
+    res.send(await db.post(req.params.name, req.body));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
   }
 });
 
-
 api.delete('/:name(\\w+)', bodyParser.text(), async (req, res) => {
-  id = req.params.name;
   try {
-    let sql = "DELETE FROM register WHERE reg_name = ? ";
-    connection.query(sql,id, (error, results) => {
-      if (error){
-        console.log(err)
-      }
-    });
-    res.sendStatus(204)
+    res.send(await db.delete(req.params.name));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
@@ -94,18 +34,10 @@ api.delete('/:name(\\w+)', bodyParser.text(), async (req, res) => {
 });
 
 api.put('/:name(\\w+)', bodyParser.text(), async (req, res) => {
-  let id = req.params.name;
-  let newval = req.body;
   try {
-    connection.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",
-    [newval, id],
-    (error, results) => {
-      console.log(error)
-    });
-    res.json(parseInt(newval))
+    res.send(await db.get(req.params.name));
   } catch (e) {
     console.error(e);
     res.sendStatus(500);
   }
 });
-

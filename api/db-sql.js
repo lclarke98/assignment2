@@ -1,46 +1,49 @@
-let mysql = require('mysql2');
-let connection = mysql.createConnection({
-              host     : 'localhost',
-              user     : 'root',
-              password : "root",
-              database : 'assignment2'
-            });
+//Database variables
+let mysql = require('mysql2/promise');
+const config = require('./db');
+const connection = mysql.createConnection(config.mysql)
+const db = connection;
 
-connection.connect(); 
-global.db = connection;
-
+// Connects to mysql database
 module.exports.get = async (id) => {
-  connection.query("SELECT reg_number FROM register WHERE reg_name = ? ",
-  [id],
-    (error, results) => {
-      console.log(error)
-    });
+  let con = await connection;
+  let [data] = await con.query("SELECT reg_number FROM register WHERE reg_name = ? ",[id]);
+  if(data.length == 0){
+    return "0";
+  }else{
+    return data[0].reg_number
+  }
 };
 
 //???
- module.exports.post = async (id) => {
-  let val =0;
-  let sql = "INSERT INTO `register`(`reg_name`,`reg_number`) VALUES ('" + id + "','" + val + "')";
-  let query = db.query(sql, function(err, result) {
-      console.log("added");
-  });
+module.exports.post = async (id,val) => {
+  console.log(id);
+  let con = await connection;
+  let [data] = await con.query("SELECT reg_number FROM register WHERE reg_name = ? ",[id]);
+  if(data.length == 0){
+    console.log(typeof(val))
+    await con.query("INSERT INTO `register`(`reg_name`,`reg_number`) VALUES ('" + id + "','" + val + "')");
+    return val;
+  }else{
+    console.log("2")
+    let currentVal = data[0].reg_number;
+    let newVal = parseInt(currentVal) + parseInt(val);
+    console.log(typeof(newVal))
+    await con.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",[newVal, id],);
+    return newVal.toString();
+  }
 };
 
 //done
 module.exports.delete = async (id) => {
-  let sql = "DELETE FROM register WHERE reg_name = ? ";
-  connection.query(sql,id, (error, results) => {
-    if (error){
-      console.log(err)
-    }
-  });
+  let con = await connection;
+  await con.query("DELETE FROM register WHERE reg_name = ? ",[id]);
+  return 204
 };
 
 //done
-module.exports.put = async (id, newval) => {
-  connection.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",
-  [newval, id],
-    (error, results) => {
-      console.log(error)
-    });
+module.exports.put = async (id, newVal) => {
+  let con = await connection;
+  await con.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",[newVal, id])
+  return newVal
 };
