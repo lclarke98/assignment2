@@ -2,9 +2,8 @@
 let mysql = require('mysql2/promise');
 const config = require('./db');
 const connection = mysql.createConnection(config.mysql)
-const db = connection;
 
-// Connects to mysql database
+//Get
 module.exports.get = async (id) => {
   let con = await connection;
   let [data] = await con.query("SELECT reg_number FROM register WHERE reg_name = ? ",[id]);
@@ -15,9 +14,8 @@ module.exports.get = async (id) => {
   }
 };
 
-//???
+//Post
 module.exports.post = async (id,val) => {
-  console.log(id);
   let con = await connection;
   let [data] = await con.query("SELECT reg_number FROM register WHERE reg_name = ? ",[id]);
   if(data.length == 0){
@@ -31,14 +29,14 @@ module.exports.post = async (id,val) => {
   }
 };
 
-//done
+//Delete
 module.exports.delete = async (id) => {
   let con = await connection;
   await con.query("DELETE FROM register WHERE reg_name = ? ",[id]);
   return 204
 };
 
-//done
+//Put
 module.exports.put = async (id, newVal) => {
   let con = await connection;
   await con.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",[newVal, id])
