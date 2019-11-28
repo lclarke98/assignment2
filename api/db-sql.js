@@ -3,7 +3,7 @@ let mysql = require('mysql2/promise');
 const config = require('./db');
 const connection = mysql.createConnection(config.mysql)
 
-//Get
+// Method to get a named register from the database, returns 0 if not in the database
 module.exports.get = async (id) => {
   let con = await connection;
   let [data] = await con.query("SELECT reg_number FROM register WHERE reg_name = ? ",[id]);
@@ -14,7 +14,8 @@ module.exports.get = async (id) => {
   }
 };
 
-//Post
+// Method to first check if the register is in the database then add it if its not
+// If it is in the database adds the new value with the current value
 module.exports.post = async (id,val) => {
   let con = await connection;
   let [data] = await con.query("SELECT reg_number FROM register WHERE reg_name = ? ",[id]);
@@ -29,14 +30,14 @@ module.exports.post = async (id,val) => {
   }
 };
 
-//Delete
+// Method to delete a named register
 module.exports.delete = async (id) => {
   let con = await connection;
   await con.query("DELETE FROM register WHERE reg_name = ? ",[id]);
   return 204
 };
 
-//Put
+// Method to update a named registers value
 module.exports.put = async (id, newVal) => {
   let con = await connection;
   await con.query("UPDATE register SET reg_number = ? WHERE reg_name = ? ",[newVal, id])

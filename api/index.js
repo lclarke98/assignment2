@@ -5,7 +5,7 @@ module.exports = api;
 
 const db = require(`./db-sql`);
 
-//get method
+// api to get value for specific register
 api.get('/:name(\\w+)', async (req, res) => {
   try {
     res.send(await db.get(req.params.name));
@@ -15,6 +15,7 @@ api.get('/:name(\\w+)', async (req, res) => {
   }
 });
 
+// api method to add a register and value to database
 api.post('/:name(\\w+)', bodyParser.text(), async (req, res) => {
   try {
     res.send(await db.post(req.params.name, req.body));
@@ -24,6 +25,7 @@ api.post('/:name(\\w+)', bodyParser.text(), async (req, res) => {
   }
 });
 
+// api method to delete a register
 api.delete('/:name(\\w+)', bodyParser.text(), async (req, res) => {
   try {
     res.send(await db.delete(req.params.name));
@@ -33,6 +35,7 @@ api.delete('/:name(\\w+)', bodyParser.text(), async (req, res) => {
   }
 });
 
+// api method to update the value of a given register
 api.put('/:name(\\w+)', bodyParser.text(), async (req, res) => {
   try {
     res.send(await db.put(req.params.name, req.body));
