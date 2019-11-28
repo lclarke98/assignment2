@@ -1,22 +1,12 @@
 Installation
 
-Step 1 : Enter ". run.sh" in the gcloud shell
-Step 2 : Enter "gcloud compute ssh master"
-Step 3 : Once in the master instance cd into the scripts folder
-Step 4 : Enter ". create-vm.sh n" with n being the number of client vms required
-
+Step 1 : Create the database using the db.sql file
+Step 2 : cd into the app directory on the vm
+Step 3 : Enter "gcloud app deploy"
 
 HOW IT WORKS
 
-The run.sh script creates the master vm. The vm startup script will install node and git.
-It will alos download the git repo which contains the script to create the client vms and
-its starup script.
+GET: This gets the named register from the database. If the requested register  is not
+in the database it returns 0.
 
-Once the master is setup, run the create vm script with the number of vms needed, This
-will create the client vm. Once the client vms are creead this script then starts the 
-command to start the dmw server. Once all jobs are complete it will delete all them
-client vms.
-
-The client vm startup script will download and install node and git, once installed the 
-script will then run the start clkient comand. This wll staart the dmw lient server.
-Once all jobs are complete the client vm will shutdown.
+POST: 
